@@ -19,38 +19,9 @@ NASA has run decades of combustion experiments in microgravity (BASS-II, Saffire
 
 ## Project structure
 
-```
-.
-├── app.py                    # Streamlit dashboard
-├── requirements.txt
-├── experiment_schema.json    # JSON Schema for one investigation
-├── extraction_prompt.md      # System prompt used to extract fields from reports
-├── data/
-│   ├── experiments.json      # Reviewed, structured investigations
-│   └── chunks.json           # Report excerpts used for sourced answers
-└── README.md
-```
 
 ## Data pipeline
 
-1. Download NASA reports (NTRS / PSI) for each investigation.
-2. Extract text from the PDFs (PyMuPDF).
-3. Send the text to Claude with `extraction_prompt.md`; output must validate against `experiment_schema.json`.
-4. Review fields flagged in `needs_human_review` by hand.
-5. Save the final result to `data/experiments.json`.
-
-Extraction runs offline, once. The deployed app only reads the reviewed JSON.
-
-## Run locally
-
-```bash
-pip install -r requirements.txt
-mkdir -p .streamlit
-echo 'ANTHROPIC_API_KEY = "your-key"' > .streamlit/secrets.toml
-streamlit run app.py
-```
-
-Keep `.streamlit/secrets.toml` out of Git (add it to `.gitignore`).
 
 ## Deploy
 
@@ -66,15 +37,27 @@ BASS-II, Saffire (IV/V/VI), SAME / SAME-R, FLEX, ACME (BRE), SoFIE-MIST. Each en
 - No partial-gravity data is available in PSI at the time of writing; microgravity and normal-gravity results can bound it.
 - Rankings use an adjustable scoring heuristic, not a validated physical model.
 
-## Data sources
 
-- NASA Physical Sciences Informatics (PSI): https://science.nasa.gov/?p=158684
+## Data sources
+ 
+**Primary data (from the challenge Resources tab)**
+- NASA Physical Sciences Informatics (PSI), Combustion Science repository: the source of the data this app is based on. Overview: https://science.nasa.gov/?p=158684
+- NASA Combustion Science: basic information about most investigations in PSI: https://www.nasa.gov/glenn/glenn-expertise-space-exploration/physical-sciences-program/combustion-science
+- *A Researcher's Guide to International Space Station Combustion Science* (2015): review of NASA's ISS combustion research; used to cross-check investigation descriptions.
+**Technical reports used for extraction**
 - NASA Technical Reports Server (NTRS): https://ntrs.nasa.gov
 - NASA-STD-6001 (materials flammability): https://ntrs.nasa.gov/citations/19990036744
+**Background and Earth applications (from the challenge Resources tab)**
+- Apollo 1, Apollo 13, and the 1997 Mir fire: historical fire and oxygen incidents that motivate this work.
+- NASA ScienceCasts, *The Power of Studying Combustion on the ISS* (2018 video).
+- Spinoffs for fire safety on Earth: firefighter air tanks (1970s), the shuttle-derived smoke detector that discriminates smoke from dust (1970s), and firefighter protective clothing (1980s).
+Per the challenge terms, NASA does not endorse non-U.S. Government websites; each source's own data-use terms apply.
+
 
 ## Team
-
-_Add team name and members here._
+1. Mohamed Saad
+2. Mohamed Shaikhon
+3. Omar Mahmoud
 
 ## Acknowledgments
 
