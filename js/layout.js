@@ -7,7 +7,7 @@
     research: '<circle cx="6" cy="7" r="2"/><circle cx="18" cy="6" r="2"/><circle cx="12" cy="18" r="2"/><path d="M8 7l8-1M7 9l4 7M17 8l-4 8"/>',
     safety: '<path d="M12 3l7 3v6c0 4-3 7-7 9-4-2-7-5-7-9V6z"/><path d="M9 12l2 2 4-4"/>',
     chat: '<path d="M4 5h16v11H9l-5 4z"/>',
-    collapse: '<path d="M15 6l-6 6 6 6"/>'
+    collapse: '<path d="M15 6l-6 6 6 6"/>',
   };
   const svg = k => `<svg viewBox="0 0 24 24" aria-hidden="true">${P[k]}</svg>`;
   const links = I.PAGES.map(p =>
@@ -17,9 +17,13 @@
   app.className = "app";
   app.innerHTML = `
     <aside class="sidebar" id="sidebar">
-      <a class="brand" href="index.html"><img src="assets/logo.webp" alt=""><span>Ignite</span></a>
+      <div class="brand-row">
+        <a class="brand" href="index.html" aria-label="Home"><img src="assets/logo.webp" alt=""></a>
+        <button class="icon-btn sidebar-collapse" id="sidebar-toggle" title="Collapse sidebar" aria-label="Collapse sidebar">${svg("collapse")}</button>
+        <button class="sidebar-logo-toggle" id="sidebar-logo-toggle" title="Open sidebar" aria-label="Open sidebar"><img src="assets/logo.webp" alt="Flame in Freefall"></button>
+      </div>
       <nav class="nav" aria-label="Main">${links}</nav>
-      <button class="icon-btn" id="sidebar-toggle" title="Collapse sidebar" aria-label="Collapse sidebar">${svg("collapse")}<span class="label">Collapse</span></button>
+      <div class="sidebar-foot">NASA PSI / RESEARCH INTERFACE<br>MISSION SYSTEMS · 2026</div>
     </aside>
     <div class="app-main">
       <header class="topbar">
@@ -43,8 +47,14 @@
   const side = app.querySelector("#sidebar");
   const sMin = store.get("ignite.sidebarMin");
   side.classList.toggle("min", sMin === null ? narrow : sMin === "1");
-  app.querySelector("#sidebar-toggle").onclick = () =>
-    store.set("ignite.sidebarMin", side.classList.toggle("min") ? "1" : "0");
+  const setSidebarMin = minimized => {
+    side.classList.toggle("min", minimized);
+    store.set("ignite.sidebarMin", minimized ? "1" : "0");
+    app.querySelector("#sidebar-toggle").setAttribute("aria-label", minimized ? "Sidebar collapsed" : "Collapse sidebar");
+    app.querySelector("#sidebar-logo-toggle").setAttribute("aria-expanded", String(!minimized));
+  };
+  app.querySelector("#sidebar-toggle").onclick = () => setSidebarMin(true);
+  app.querySelector("#sidebar-logo-toggle").onclick = () => setSidebarMin(false);
 
   // chat panel
   const chat = app.querySelector("#chat-panel");
