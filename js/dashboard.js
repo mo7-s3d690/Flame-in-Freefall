@@ -1,0 +1,1 @@
+// Fire dashboard page logic
