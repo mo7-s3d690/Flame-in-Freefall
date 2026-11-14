@@ -63,7 +63,7 @@ button,textarea,input,select{font:inherit;color:inherit}
 .msg{max-width:90%;padding:11px 13px;border-radius:9px;background:var(--panel-2);border:1px solid var(--line);white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px}
 .msg.user{align-self:flex-end;background:#ff79381a;border-color:#ff79383c}
 .msg.error{color:#ffb4a0}
-.msg .src{display:block;margin-top:8px;font-size:11px;color:var(--cold)}
+.msg .src{display:block;margin-top:8px;font-size:11px;color:var(--muted)}
 .msg .src:hover{text-decoration:underline}
 .chat-chips{display:flex;flex-wrap:wrap;gap:7px;padding:0 16px 13px}
 .chat-chips button{padding:6px 9px;border:1px solid var(--line);border-radius:5px;background:none;color:var(--muted);font-size:10px;cursor:pointer;text-align:left}
