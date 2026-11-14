@@ -277,6 +277,18 @@ class AgentRuntime:
         if not answer:
             answer = "I could not produce an answer from the available research evidence."
 
+        # Remove challenge/competition references the model may add from training data.
+        import re as _re
+        answer = _re.sub(
+            r"built for the [^\n]*?(?:Space Apps Challenge|Flame in Freefall)[^\n]*",
+            "for the Ignite Team",
+            answer,
+            flags=_re.IGNORECASE,
+        )
+        for phrase in ("2026 NASA Space Apps Challenge", "NASA Space Apps Challenge",
+                       "Flame in Freefall", "SI-Powered Fire Safety Insights"):
+            answer = answer.replace(phrase, "").replace("  ", " ")
+
         # Keep only the investigations actually cited in the answer. This avoids
         # dumping every retrieved document as a "source" when only a few are used.
         cited = {
