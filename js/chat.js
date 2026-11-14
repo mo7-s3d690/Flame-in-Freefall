@@ -13,8 +13,11 @@
 
   panel.innerHTML = `
     <div class="chat-head">
-      <div><strong>Fire safety assistant</strong><br><small>Answers from the Ignite research data</small></div>
-      <button type="button" id="chat-clear">Clear</button>
+      <div><strong>Ignite AI assistant</strong><br><small>Answers from the Ignite research data</small></div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button type="button" id="chat-clear">Clear</button>
+        <button type="button" id="chat-close" class="chat-close-btn" aria-label="Close">&times;</button>
+      </div>
     </div>
     <div class="chat-log" id="chat-log" aria-live="polite"></div>
     <div class="chat-chips" id="chat-chips"></div>
@@ -29,10 +32,36 @@
   function sourceLabel(s) {
     return s.research_id || (s.source ? s.source.replace(/\.md$/i, "") : "source");
   }
+  function appendRichText(container, text) {
+    const parts = String(text).split(/(\\*\\*[^*]+\\*\\*)/g);
+    parts.forEach(part => {
+      const m = part.match(/^\\*\\*([^*]+)\\*\\*$/);
+      if (m) {
+        const strong = document.createElement("strong");
+        strong.textContent = m[1];
+        container.appendChild(strong);
+      } else if (part) {
+        container.appendChild(document.createTextNode(part));
+      }
+    });
+  }
+  function thinkingBubble() {
+    const d = document.createElement("div");
+    d.className = "msg bot thinking";
+    const flame = document.createElement("span");
+    flame.className = "flame";
+    const text = document.createElement("span");
+    text.textContent = "Thinking…";
+    d.appendChild(flame);
+    d.appendChild(text);
+    log.appendChild(d);
+    log.scrollTop = log.scrollHeight;
+    return d;
+  }
   function bubble(role, text, sources, usedRag) {
     const d = document.createElement("div");
     d.className = "msg " + role;
-    d.textContent = text;
+    appendRichText(d, text);
     const seen = new Set();
     const labels = [];
     (sources || []).forEach(s => {
@@ -68,7 +97,7 @@
     chips.innerHTML = "";
     if (!history.length) CHIPS.forEach(c => {
       const b = document.createElement("button");
-      b.type = "button"; b.textContent = c; b.onclick = () => send(c);
+      b.type = "button"; b.textContent = c; b.onclick = (e) => { e.stopPropagation(); send(c); };
       chips.appendChild(b);
     });
   }
@@ -81,7 +110,7 @@
     bubble("user", q);
     input.value = "";
     sendBtn.disabled = true;
-    const wait = bubble("bot", "Thinking…");
+    const wait = thinkingBubble();
     let message = q;
     const page = document.body.dataset.page;
     let env = null;
@@ -122,6 +151,8 @@
 
   form.onsubmit = e => { e.preventDefault(); send(input.value); };
   input.onkeydown = e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(input.value); } };
-  panel.querySelector("#chat-clear").onclick = () => { history = []; convId = null; save(); saveConv(); render(); };
+  panel.querySelector("#chat-clear").onclick = (e) => { if (e) e.stopPropagation(); history = []; convId = null; save(); saveConv(); render(); };
+  const closeBtn = panel.querySelector("#chat-close");
+  if (closeBtn) closeBtn.onclick = () => { if (typeof window.igniteToggleChat === "function") window.igniteToggleChat(); };
   render();
 })();
