@@ -32,18 +32,133 @@
   function sourceLabel(s) {
     return s.research_id || (s.source ? s.source.replace(/\.md$/i, "") : "source");
   }
-  function appendRichText(container, text) {
-    const parts = String(text).split(/(\\*\\*[^*]+\\*\\*)/g);
-    parts.forEach(part => {
-      const m = part.match(/^\\*\\*([^*]+)\\*\\*$/);
-      if (m) {
-        const strong = document.createElement("strong");
-        strong.textContent = m[1];
-        container.appendChild(strong);
-      } else if (part) {
-        container.appendChild(document.createTextNode(part));
+  // Minimal markdown renderer for bot answers. Builds DOM nodes only (never innerHTML), so
+  // model output cannot inject markup. Supports headings, **bold**, *italic*, `code`,
+  // fenced code, [text](http(s) url), bullet/numbered lists (nested), pipe tables, rules.
+  function appendInline(container, text) {
+    const re = /\*\*[^*\n]+?\*\*|`[^`\n]+`|\[[^\]\n]+\]\(https?:\/\/[^\s)]+\)|\*[^*\s][^*\n]*?\*/g;
+    let last = 0, m;
+    while ((m = re.exec(text))) {
+      if (m.index > last) container.appendChild(document.createTextNode(text.slice(last, m.index)));
+      const tok = m[0];
+      let el;
+      if (tok.startsWith("**")) {
+        el = document.createElement("strong");
+        appendInline(el, tok.slice(2, -2));
+      } else if (tok[0] === "`") {
+        el = document.createElement("code");
+        el.textContent = tok.slice(1, -1);
+      } else if (tok[0] === "[") {
+        const lm = tok.match(/^\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)$/);
+        el = document.createElement("a");
+        el.href = lm[2];
+        el.target = "_blank";
+        el.rel = "noopener";
+        el.textContent = lm[1];
+      } else {
+        el = document.createElement("em");
+        el.textContent = tok.slice(1, -1);
       }
-    });
+      container.appendChild(el);
+      last = m.index + tok.length;
+    }
+    if (last < text.length) container.appendChild(document.createTextNode(text.slice(last)));
+  }
+
+  const LIST_ITEM = /^(\s*)([-*•]|\d+[.)])\s+(.*)$/;
+  const HEADING = /^\s{0,3}(#{1,6})\s+(.*?)\s*#*\s*$/;
+  const isFence = s => /^\s*```/.test(s);
+  const isRule = s => /^\s*([-*_])(\s*\1){2,}\s*$/.test(s);
+  const isTableSep = s => s.includes("|") && /^\s*\|?\s*:?-{3,}:?\s*(\|\s*:?-{3,}:?\s*)*\|?\s*$/.test(s);
+  const isTableStart = (lines, i) => lines[i].includes("|") && i + 1 < lines.length && isTableSep(lines[i + 1]);
+  const splitRow = s => s.trim().replace(/^\|/, "").replace(/\|$/, "").split("|").map(c => c.trim());
+  const isBlockStart = (lines, i) =>
+    isFence(lines[i]) || HEADING.test(lines[i]) || isRule(lines[i]) || LIST_ITEM.test(lines[i]) || isTableStart(lines, i);
+
+  function renderList(lines, i, container) {
+    const stack = [];
+    while (i < lines.length) {
+      if (!lines[i].trim()) {
+        // A blank line only ends the list if no further item follows (keeps "1." "2." numbering intact).
+        let j = i + 1;
+        while (j < lines.length && !lines[j].trim()) j++;
+        if (j < lines.length && LIST_ITEM.test(lines[j])) { i = j; continue; }
+        break;
+      }
+      const m = lines[i].match(LIST_ITEM);
+      if (!m) break;
+      const indent = m[1].replace(/\t/g, "    ").length;
+      const ordered = /\d/.test(m[2]);
+      while (stack.length && indent < stack[stack.length - 1].indent) stack.pop();
+      let top = stack[stack.length - 1];
+      if (!top || indent > top.indent) {
+        const list = document.createElement(ordered ? "ol" : "ul");
+        if (ordered) { const n = parseInt(m[2], 10); if (n > 1) list.start = n; }
+        (top ? (top.el.lastElementChild || top.el) : container).appendChild(list);
+        top = { indent, el: list };
+        stack.push(top);
+      }
+      const li = document.createElement("li");
+      appendInline(li, m[3]);
+      top.el.appendChild(li);
+      i++;
+    }
+    return i;
+  }
+
+  function renderMarkdown(container, text) {
+    const lines = String(text == null ? "" : text).replace(/\r\n?/g, "\n").split("\n");
+    let i = 0;
+    while (i < lines.length) {
+      const line = lines[i];
+      if (!line.trim()) { i++; continue; }
+      if (isFence(line)) {
+        const buf = [];
+        i++;
+        while (i < lines.length && !isFence(lines[i])) buf.push(lines[i++]);
+        i++;
+        const pre = document.createElement("pre"), code = document.createElement("code");
+        code.textContent = buf.join("\n");
+        pre.appendChild(code);
+        container.appendChild(pre);
+        continue;
+      }
+      const h = line.match(HEADING);
+      if (h) {
+        const el = document.createElement("div");
+        el.className = "md-h md-h" + Math.min(h[1].length, 3);
+        appendInline(el, h[2]);
+        container.appendChild(el);
+        i++;
+        continue;
+      }
+      if (isRule(line)) { container.appendChild(document.createElement("hr")); i++; continue; }
+      if (isTableStart(lines, i)) {
+        const head = splitRow(line);
+        i += 2;
+        const rows = [];
+        while (i < lines.length && lines[i].trim() && lines[i].includes("|")) rows.push(splitRow(lines[i++]));
+        const wrap = document.createElement("div");
+        wrap.className = "md-table";
+        const table = document.createElement("table");
+        const headRow = table.createTHead().insertRow();
+        head.forEach(c => { const th = document.createElement("th"); appendInline(th, c); headRow.appendChild(th); });
+        const body = table.createTBody();
+        rows.forEach(r => {
+          const tr = body.insertRow();
+          head.forEach((_, k) => appendInline(tr.insertCell(), r[k] || ""));
+        });
+        wrap.appendChild(table);
+        container.appendChild(wrap);
+        continue;
+      }
+      if (LIST_ITEM.test(line)) { i = renderList(lines, i, container); continue; }
+      const p = document.createElement("p");
+      const buf = [lines[i++]];
+      while (i < lines.length && lines[i].trim() && !isBlockStart(lines, i)) buf.push(lines[i++]);
+      buf.forEach((l, k) => { if (k) p.appendChild(document.createElement("br")); appendInline(p, l.trim()); });
+      container.appendChild(p);
+    }
   }
   function thinkingBubble() {
     const d = document.createElement("div");
@@ -61,7 +176,8 @@
   function bubble(role, text, sources, usedRag) {
     const d = document.createElement("div");
     d.className = "msg " + role;
-    appendRichText(d, text);
+    if (role === "bot") { d.classList.add("md"); renderMarkdown(d, text); }
+    else d.textContent = text; // user text stays literal
     const seen = new Set();
     const labels = [];
     (sources || []).forEach(s => {
@@ -132,7 +248,7 @@
         body: JSON.stringify({ message, conversation_id: convId })
       });
       clearTimeout(t);
-      if (!r.ok) throw new Error("HTTP " + r.status);
+      if (!r.ok) { const e = new Error("HTTP " + r.status); e.status = r.status; throw e; }
       const data = await r.json();
       wait.remove();
       convId = data.conversation_id || convId;
@@ -142,9 +258,13 @@
       bubble("bot", data.answer, sources, data.used_rag);
     } catch (err) {
       wait.remove();
-      const msg = (err && err.name === "AbortError")
-        ? "The assistant took too long to respond. Please try again."
-        : "I can't reach the assistant right now. Check that the API is running at " + API + ".";
+      // Tell "server unreachable" apart from "server answered with an error"; the old message
+      // blamed the connection even when the API was up and the LLM call had failed.
+      let msg;
+      if (err && err.name === "AbortError") msg = "The assistant took too long to respond. Please try again.";
+      else if (err && err.status === 503) msg = "The assistant isn't set up on the server yet (the LLM API key is probably missing).";
+      else if (err && err.status) msg = "The assistant hit an error on the server (HTTP " + err.status + "). Please try again in a moment.";
+      else msg = "I can't reach the assistant right now. Check that the API is running at " + API + ".";
       bubble("bot", msg);
     }
     save();

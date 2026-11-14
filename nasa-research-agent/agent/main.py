@@ -274,9 +274,6 @@ class AgentRuntime:
             logger.exception("Agent run failed")
             raise AgentError("The assistant could not complete the request.") from exc
 
-        if not answer:
-            answer = "I could not produce an answer from the available research evidence."
-
         # Remove challenge/competition references the model may add from training data.
         import re as _re
         answer = _re.sub(
@@ -288,6 +285,11 @@ class AgentRuntime:
         for phrase in ("2026 NASA Space Apps Challenge", "NASA Space Apps Challenge",
                        "Flame in Freefall", "SI-Powered Fire Safety Insights"):
             answer = answer.replace(phrase, "").replace("  ", " ")
+
+        # Checked after the scrub above: removing those phrases can leave an empty answer.
+        answer = answer.strip()
+        if not answer:
+            answer = "I could not produce an answer from the available research evidence."
 
         # Keep only the investigations actually cited in the answer. This avoids
         # dumping every retrieved document as a "source" when only a few are used.

@@ -78,15 +78,21 @@
     const nowClosed = modal ? modal.classList.toggle("closed") : chat.classList.toggle("closed");
     store.set("ignite.chatOpen", nowClosed ? "0" : "1");
   };
-  app.querySelector("#chat-toggle").onclick = toggleChat;
+  const chatBtn = app.querySelector("#chat-toggle");
+  chatBtn.onclick = toggleChat;
   const fabBtn = document.getElementById("chat-fab");
   if (fabBtn) fabBtn.onclick = toggleChat;
   window.igniteToggleChat = toggleChat;
   if (modal) {
+    // Click outside the chat closes it. Both launcher buttons are excluded because they
+    // toggle the chat themselves; without that, the top-bar button opened the chat and
+    // this handler closed it again in the same click.
     document.addEventListener("click", (e) => {
       if (modal.classList.contains("closed")) return;
+      if (!e.target.isConnected) return; // target was re-rendered away mid-click (e.g. Clear)
       if (modal.contains(e.target)) return;
       if (fabBtn && fabBtn.contains(e.target)) return;
+      if (chatBtn.contains(e.target)) return;
       toggleChat();
     });
   }
