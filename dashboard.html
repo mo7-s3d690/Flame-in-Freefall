@@ -11,11 +11,65 @@
 </head>
 <body data-page="dashboard" data-title="Fire dashboard">
   <main id="page-content">
-    <section class="card">
-      <h2>Fire dashboard</h2>
-      <p>The 3D habitat, risk indicator and matched tests will appear here.</p>
-    </section>
+    <div class="dash">
+      <header class="dash-head fade s1">
+        <div class="eyebrow">DATA-MATCHED ESTIMATE · NOT A PHYSICS SIMULATION</div>
+        <p id="env-line" class="env-line"></p>
+        <p id="notice" class="notice" hidden>No mission set yet, showing the Moon-base preset. <a href="index.html">Set up a mission →</a></p>
+      </header>
+
+      <div class="dash-grid">
+        <section class="panel scene-panel fade s2" aria-label="3D habitat">
+          <div id="scene"></div>
+          <div class="scene-tag">SAMPLE BURN</div>
+          <div class="seg scene-toggle" role="group" aria-label="Gravity">
+            <button type="button" data-g="micro">Microgravity</button>
+            <button type="button" data-g="normal">Earth gravity</button>
+          </div>
+          <div class="scene-hint">Drag to rotate</div>
+        </section>
+
+        <aside class="panel risk-panel fade s3" aria-label="Risk indicator">
+          <h3>Flammability indicator</h3>
+          <div class="gauge-wrap">
+            <svg viewBox="0 0 140 140" class="gauge" aria-hidden="true">
+              <circle class="g-track" cx="70" cy="70" r="58"/>
+              <circle id="g-arc" class="g-arc" cx="70" cy="70" r="58" transform="rotate(-90 70 70)"/>
+            </svg>
+            <div class="g-read"><b id="g-num">0</b><span>%</span><em id="g-level">–</em></div>
+          </div>
+          <p id="conf" class="conf"></p>
+          <div id="factors" class="factors"></div>
+        </aside>
+
+        <section class="panel whatif fade s4" aria-label="What-if">
+          <h3>What-if <button type="button" id="reset" class="link-btn">Reset to mission</button></h3>
+          <label>O₂ concentration <output id="o-o2"></output><input id="c-o2" type="range" min="10" max="100" step="1"></label>
+          <label>Cabin pressure <output id="o-p"></output><input id="c-p" type="range" min="3" max="16" step="0.1"></label>
+          <label>Airflow <output id="o-f"></output><input id="c-f" type="range" min="0" max="60" step="1"></label>
+          <div class="pair">
+            <label>Material
+              <select id="c-m"><option value="fabric">Fabric</option><option value="plastic">Plastic / polymer</option><option value="paper">Paper</option><option value="gas">Gas</option><option value="liquid">Liquid droplet</option></select>
+            </label>
+            <label>Diluent
+              <select id="c-d"><option value="none">None</option><option value="co2">CO₂</option><option value="helium">Helium</option></select>
+            </label>
+          </div>
+        </section>
+
+        <section class="panel matches fade s5" aria-label="Matched investigations">
+          <h3>Closest PSI investigations</h3>
+          <ol id="match-list" class="match-list"></ol>
+        </section>
+
+        <section class="panel notes fade s6" aria-label="Warnings">
+          <h3>Warnings &amp; data gaps</h3>
+          <ul id="warn-list" class="warn-list"></ul>
+        </section>
+      </div>
+    </div>
   </main>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="js/config.js"></script>
   <script src="js/layout.js"></script>
   <script src="js/chat.js"></script>

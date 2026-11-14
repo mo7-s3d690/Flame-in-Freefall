@@ -11,10 +11,37 @@
 </head>
 <body data-page="research" data-title="Research explorer">
   <main id="page-content">
-    <section class="card">
-      <h2>Research explorer</h2>
-      <p>Filters, the connected investigation graph and comparisons will appear here.</p>
-    </section>
+    <div class="rx">
+      <header class="fade s1">
+        <div class="eyebrow">NASA PSI · COMBUSTION INVESTIGATIONS</div>
+        <p class="rx-sub">Each node is an investigation. Lines connect studies that build on each other or share hardware and fuel. Click a node to read it, add up to 3 to compare.</p>
+      </header>
+
+      <div class="rx-grid">
+        <aside class="panel filters fade s2" aria-label="Filters">
+          <h3>Filters <button type="button" id="clear" class="link-btn">Clear</button></h3>
+          <div class="fgroup" data-key="fuel"><h4>Fuel</h4></div>
+          <div class="fgroup" data-key="goal"><h4>Goal</h4></div>
+          <div class="fgroup" data-key="gravity"><h4>Setting</h4></div>
+          <div class="legend" id="legend"></div>
+          <p class="count" id="count"></p>
+        </aside>
+
+        <section class="panel web-panel fade s3" aria-label="Connection graph">
+          <svg id="web" viewBox="0 0 800 580" role="group" aria-label="Investigation connection graph"></svg>
+          <div class="web-hint">Hover to trace links · click to open · solid line = builds on, faint line = shared hardware + fuel</div>
+        </section>
+
+        <section class="panel detail fade s4" id="detail" aria-live="polite">
+          <p class="empty">Select a node in the web to see its objective, conditions, sensors and findings.</p>
+        </section>
+      </div>
+
+      <section class="panel compare fade s5" id="compare-panel" hidden>
+        <h3>Compare <button type="button" id="cmp-clear" class="link-btn">Clear</button></h3>
+        <div class="table-wrap"><table id="cmp"></table></div>
+      </section>
+    </div>
   </main>
   <script src="js/config.js"></script>
   <script src="js/layout.js"></script>
