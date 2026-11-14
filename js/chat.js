@@ -1,12 +1,15 @@
-// Persistent RAG chat panel. Talks to FastAPI: POST {API_BASE}/api/chat -> { answer, sources:[{title,url}] }
+// Persistent RAG chat panel. Talks to FastAPI: POST {API_BASE}/api/v1/chat -> { answer, sources, used_rag, conversation_id }
 (() => {
   const panel = document.getElementById("chat-panel");
   if (!panel) return;
-  const KEY = "ignite.chat", API = window.IGNITE.API_BASE;
+  const KEY = "ignite.chat", CONV_KEY = "ignite.conv", API = window.IGNITE.API_BASE;
   const CHIPS = ["Why is 30% O₂ risky?", "Which tests used CO₂ suppression?", "What am I looking at on this page?"];
   let history = [];
   try { history = JSON.parse(sessionStorage.getItem(KEY)) || []; } catch {}
+  let convId = null;
+  try { convId = sessionStorage.getItem(CONV_KEY); } catch {}
   const save = () => { try { sessionStorage.setItem(KEY, JSON.stringify(history.slice(-50))); } catch {} };
+  const saveConv = () => { try { if (convId) sessionStorage.setItem(CONV_KEY, convId); else sessionStorage.removeItem(CONV_KEY); } catch {} };
 
   panel.innerHTML = `
     <div class="chat-head">
@@ -23,17 +26,37 @@
         form = panel.querySelector("#chat-form"), input = panel.querySelector("#chat-input"),
         sendBtn = form.querySelector("button");
 
-  function bubble(role, text, sources) {
+  function sourceLabel(s) {
+    return s.research_id || (s.source ? s.source.replace(/\.md$/i, "") : "source");
+  }
+  function bubble(role, text, sources, usedRag) {
     const d = document.createElement("div");
     d.className = "msg " + role;
     d.textContent = text;
+    const seen = new Set();
+    const labels = [];
     (sources || []).forEach(s => {
-      if (!/^https?:\/\//.test(s.url)) return;
-      const a = document.createElement("a");
-      a.className = "src"; a.href = s.url; a.target = "_blank"; a.rel = "noopener";
-      a.textContent = s.title || s.url;
-      d.appendChild(a);
+      const label = sourceLabel(s);
+      if (seen.has(label)) return;
+      seen.add(label);
+      labels.push(label);
     });
+    if (labels.length) {
+      const head = document.createElement("span");
+      head.className = "src";
+      head.style.fontWeight = "600";
+      head.textContent = "Resources:";
+      d.appendChild(head);
+      labels.forEach((label, i) => {
+        const span = document.createElement("span");
+        span.className = "src";
+        span.textContent = label;
+        d.appendChild(span);
+      });
+    }
+    if (usedRag === false && role === "bot") {
+      // no-op; keep minimal
+    }
     log.appendChild(d);
     log.scrollTop = log.scrollHeight;
     return d;
@@ -51,7 +74,7 @@
   }
 
   async function send(q) {
-    q = q.trim();
+    q = (q || "").trim();
     if (!q || sendBtn.disabled) return;
     chips.innerHTML = "";
     history.push({ role: "user", text: q }); save();
@@ -59,24 +82,38 @@
     input.value = "";
     sendBtn.disabled = true;
     const wait = bubble("bot", "Thinking…");
+    let message = q;
+    const page = document.body.dataset.page;
     let env = null;
     try { env = JSON.parse(sessionStorage.getItem("ignite.env")); } catch {}
+    if (page || env) {
+      const ctx = [];
+      if (page) ctx.push(`page=${page}`);
+      if (env) ctx.push(`env=O2 ${env.o2}% · ${env.pressure} psi · flow ${env.flow} cm/s · ${env.gravity} · ${env.material} · diluent ${env.diluent}`);
+      message = `[Context: ${ctx.join("; ")}]\n${q}`;
+    }
     try {
-      const ctl = new AbortController(), t = setTimeout(() => ctl.abort(), 30000);
-      const r = await fetch(API + "/api/chat", {
+      const ctl = new AbortController(), t = setTimeout(() => ctl.abort(), 60000);
+      const r = await fetch(API + "/api/v1/chat", {
         method: "POST", signal: ctl.signal,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ question: q, page: document.body.dataset.page, env, history: history.slice(-7, -1) })
+        body: JSON.stringify({ message, conversation_id: convId })
       });
       clearTimeout(t);
       if (!r.ok) throw new Error("HTTP " + r.status);
       const data = await r.json();
       wait.remove();
-      history.push({ role: "bot", text: data.answer, sources: data.sources || [] });
-      bubble("bot", data.answer, data.sources);
-    } catch {
+      convId = data.conversation_id || convId;
+      saveConv();
+      const sources = Array.isArray(data.sources) ? data.sources : [];
+      history.push({ role: "bot", text: data.answer, sources });
+      bubble("bot", data.answer, sources, data.used_rag);
+    } catch (err) {
       wait.remove();
-      bubble("bot error", "I can't reach the assistant right now. Check that the API is running at " + API + ".");
+      const msg = (err && err.name === "AbortError")
+        ? "The assistant took too long to respond. Please try again."
+        : "I can't reach the assistant right now. Check that the API is running at " + API + ".";
+      bubble("bot", msg);
     }
     save();
     sendBtn.disabled = false;
@@ -85,6 +122,6 @@
 
   form.onsubmit = e => { e.preventDefault(); send(input.value); };
   input.onkeydown = e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(input.value); } };
-  panel.querySelector("#chat-clear").onclick = () => { history = []; save(); render(); };
+  panel.querySelector("#chat-clear").onclick = () => { history = []; convId = null; save(); saveConv(); render(); };
   render();
 })();
