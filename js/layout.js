@@ -33,11 +33,23 @@
       </header>
       <div class="app-body">
         <div class="app-content" id="app-content"></div>
-        <aside class="chat" id="chat-panel" aria-label="Fire safety assistant"></aside>
+        <div class="chat-modal closed" id="chat-modal">
+          <aside class="chat" id="chat-panel" aria-label="Fire safety assistant"></aside>
+        </div>
       </div>
     </div>`;
   app.querySelector("#app-content").appendChild(document.getElementById("page-content"));
   document.body.prepend(app);
+
+  // Floating action button to open the Ignite AI assistant popup
+  const fab = document.createElement("button");
+  fab.type = "button";
+  fab.className = "chat-fab";
+  fab.id = "chat-fab";
+  fab.setAttribute("aria-controls", "chat-panel");
+  fab.setAttribute("aria-label", "Open Ignite AI assistant");
+  fab.innerHTML = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg><span class="fab-label">Ignite AI assistant</span>`;
+  document.body.appendChild(fab);
 
   const store = { get: k => { try { return localStorage.getItem(k); } catch { return null; } },
                   set: (k, v) => { try { localStorage.setItem(k, v); } catch {} } };
@@ -56,12 +68,28 @@
   app.querySelector("#sidebar-toggle").onclick = () => setSidebarMin(true);
   app.querySelector("#sidebar-logo-toggle").onclick = () => setSidebarMin(false);
 
-  // chat panel
+  // chat panel (modal popup)
   const chat = app.querySelector("#chat-panel");
+  const modal = app.querySelector("#chat-modal");
   const cOpen = store.get("ignite.chatOpen");
-  chat.classList.toggle("closed", cOpen === null ? innerWidth < 1100 : cOpen === "0");
-  app.querySelector("#chat-toggle").onclick = () =>
-    store.set("ignite.chatOpen", chat.classList.toggle("closed") ? "0" : "1");
+  const startClosed = cOpen === null ? true : cOpen === "0";
+  if (modal) modal.classList.toggle("closed", startClosed);
+  const toggleChat = () => {
+    const nowClosed = modal ? modal.classList.toggle("closed") : chat.classList.toggle("closed");
+    store.set("ignite.chatOpen", nowClosed ? "0" : "1");
+  };
+  app.querySelector("#chat-toggle").onclick = toggleChat;
+  const fabBtn = document.getElementById("chat-fab");
+  if (fabBtn) fabBtn.onclick = toggleChat;
+  window.igniteToggleChat = toggleChat;
+  if (modal) {
+    document.addEventListener("click", (e) => {
+      if (modal.classList.contains("closed")) return;
+      if (modal.contains(e.target)) return;
+      if (fabBtn && fabBtn.contains(e.target)) return;
+      toggleChat();
+    });
+  }
 
   // environment chip (filled by the setup page via sessionStorage "ignite.env")
   const chip = app.querySelector("#env-chip");
