@@ -28,8 +28,6 @@
     <div class="app-main">
       <header class="topbar">
         <h1>${title}</h1>
-        <div class="env-chip" id="env-chip"></div>
-        <button class="chat-btn" id="chat-toggle" aria-controls="chat-panel">${svg("chat")}Assistant</button>
       </header>
       <div class="app-body">
         <div class="app-content" id="app-content"></div>
@@ -78,33 +76,18 @@
     const nowClosed = modal ? modal.classList.toggle("closed") : chat.classList.toggle("closed");
     store.set("ignite.chatOpen", nowClosed ? "0" : "1");
   };
-  const chatBtn = app.querySelector("#chat-toggle");
-  chatBtn.onclick = toggleChat;
   const fabBtn = document.getElementById("chat-fab");
   if (fabBtn) fabBtn.onclick = toggleChat;
   window.igniteToggleChat = toggleChat;
   if (modal) {
-    // Click outside the chat closes it. Both launcher buttons are excluded because they
-    // toggle the chat themselves; without that, the top-bar button opened the chat and
-    // this handler closed it again in the same click.
+    // Click outside the chat closes it. The floating button is excluded because it toggles
+    // the chat itself; otherwise this handler would close it again in the same click.
     document.addEventListener("click", (e) => {
       if (modal.classList.contains("closed")) return;
       if (!e.target.isConnected) return; // target was re-rendered away mid-click (e.g. Clear)
       if (modal.contains(e.target)) return;
       if (fabBtn && fabBtn.contains(e.target)) return;
-      if (chatBtn.contains(e.target)) return;
       toggleChat();
     });
   }
-
-  // environment chip (filled by the setup page via sessionStorage "ignite.env")
-  const chip = app.querySelector("#env-chip");
-  const renderEnv = () => {
-    let env = null;
-    try { env = JSON.parse(sessionStorage.getItem("ignite.env")); } catch {}
-    chip.classList.toggle("set", !!env);
-    chip.textContent = env ? `O₂ ${env.o2}% · ${env.pressure} psi` : "No environment set";
-  };
-  renderEnv();
-  addEventListener("ignite:env", renderEnv);
 })();
