@@ -77,10 +77,13 @@
       head.textContent = "Resources:";
       d.appendChild(head);
       labels.forEach((label, i) => {
-        const span = document.createElement("span");
-        span.className = "src";
-        span.textContent = label;
-        d.appendChild(span);
+        const a = document.createElement("a");
+        a.className = "src";
+        a.href = "https://psi.nasa.gov/physci/repo/data/investigations/" + encodeURIComponent(label);
+        a.target = "_blank";
+        a.rel = "noopener";
+        a.textContent = label;
+        d.appendChild(a);
       });
     }
     if (usedRag === false && role === "bot") {
