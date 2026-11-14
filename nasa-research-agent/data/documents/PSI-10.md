@@ -10,7 +10,7 @@ A candle flame on Earth is shaped by the hot gas rising off it, which is exactly
 | Research name | ACME/Flame Design |
 | Full investigation name | Advanced Combustion via Microgravity Experiments / Flame Design |
 | Proposal title | Flame Design: A Novel Approach to Clean Efficient Diffusion Flames |
-| Research category | Fundamental |
+| Research category | fundamental  |
 | Research area | Combustion Science, sub-area Flames of Gaseous Fuels |
 | Investigation period | 01-14-1999 to 04-30-2025 |
 | Project type | Microgravity investigation |

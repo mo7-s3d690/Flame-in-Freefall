@@ -11,7 +11,7 @@ Fire behaves differently when gravity is taken away. On Earth, the hot gases ris
 | **PSI ID** | PSI-26 |
 | **Short Name** | BASS |
 | **Full Investigation Name** | Burning and Suppression of Solids |
-| **Research Category** | Suppression / Fundamental |
+| **Research Category** | prevention  |
 | **Research Area** | Combustion Science — Spacecraft Fire Safety |
 | **Investigation Period** | 01 October 2009 – 30 June 2013 |
 | **Sponsoring Agency** | National Aeronautics and Space Administration (NASA) |
@@ -113,7 +113,7 @@ The simpler, well-controlled flow environment inside the MSG — particularly in
 
 ## 6. Fire Safety Relevance
 
-**Category: Suppression / Fundamental**
+**Category: prevention**
 
 BASS addresses fire safety at multiple levels simultaneously, covering both the fundamental characterisation of how solid materials burn and the applied question of whether a specific suppression agent can extinguish those fires.
 
@@ -192,7 +192,7 @@ The testing of cotton-fiberglass blends, Nomex, and Ultem in controlled microgra
 | Attribute | Value |
 |---|---|
 | **Primary Research Focus** | Solid-material flammability in microgravity; flame spread; nitrogen-based suppression |
-| **Fire Safety Category** | Suppression / Fundamental |
+| **Fire Safety Category** | prevention  |
 | **Combustion Domain** | Solid fuel combustion; opposed and concurrent flame spread; wake flames |
 | **Fuel Materials** | Cotton/fiberglass fabric (75/25%), Nomex, Ultem, PMMA (spheres 1 cm and 2 cm), SIBAL |
 | **Fuel Form** | Solid samples (flat fabric sheets, spheres, cylinders) |

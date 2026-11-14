@@ -12,7 +12,7 @@ Solid materials in a spacecraft cannot be burned safely on demand, so the ACME B
 | Proposal title | Experimental Investigation of Emulated Burning Rate at Various Gravity Levels |
 | Research area | Combustion Science, sub-area Flames of Gaseous Fuels |
 | Project type | Microgravity investigation |
-| Category | Prevention (material flammability mapping) |
+| Category | suppression  |
 | Investigation period | 01-01-2010 to 02-08-2025 (end date format ambiguous in source; read here as 8 Feb 2025) |
 | Sponsor / center | NASA / Glenn Research Center (GRC) |
 | Platform | International Space Station; hardware: Combustion Integrated Rack (CIR) and ACME |

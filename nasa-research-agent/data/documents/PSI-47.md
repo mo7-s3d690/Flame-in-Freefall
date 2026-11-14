@@ -11,7 +11,7 @@ Before you can fight a fire in space, you have to know one is happening. That se
 | **PSI ID** | PSI-47 |
 | **Short Name** | DAFT / DAFT-2 |
 | **Full Investigation Name** | Dust and Aerosol Measurement Feasibility Test / Dust and Aerosol Measurement Feasibility Test-2 |
-| **Research Category** | Detection |
+| **Research Category** | detection  |
 | **Research Area** | Combustion Science — Spacecraft Fire Safety |
 | **Investigation Period** | 01 March 2003 – 01 June 2009 |
 | **Sponsoring Agency** | National Aeronautics and Space Administration (NASA) |
@@ -99,7 +99,7 @@ Demonstrating that ARD aerosols could be reliably generated and contained in Myl
 
 ## 6. Fire Safety Relevance
 
-**Category: Detection**
+**Category: detection**
 
 DAFT is unambiguously a fire detection investigation. Its entire purpose is to ensure that the instruments used to detect combustion products — specifically smoke aerosols — work correctly in the environment where they are needed most.
 
@@ -171,7 +171,7 @@ The containment approach using Mylar bags and GN₂ dispersion for aerosol stand
 | Attribute | Value |
 |---|---|
 | **Primary Research Focus** | Validation of a modified condensation nuclei counter for aerosol measurement in microgravity |
-| **Fire Safety Category** | Detection |
+| **Fire Safety Category** | detection  |
 | **Combustion Domain** | Smoke aerosol measurement; instrument qualification; particle counting |
 | **Aerosol Material** | Arizona Red Dust (ARD Fine) |
 | **Aerosol Carrier** | Gaseous nitrogen (GN₂) |

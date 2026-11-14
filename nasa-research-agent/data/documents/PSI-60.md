@@ -10,7 +10,7 @@ Not every contribution to microgravity combustion science requires a trip to orb
 |---|---|
 | **PSI ID** | PSI-60 |
 | **Full Investigation Name** | Computational and Experimental Analysis of SPICE Data Sets |
-| **Research Category** | Fundamental |
+| **Research Category** | fundamental  |
 | **Research Area** | Combustion Science — Gaseous |
 | **Project Type** | **Ground Investigation** (not a flight experiment) |
 | **Investigation Period** | 05 June 2019 – 29 August 2022 |
@@ -107,7 +107,7 @@ The sensitivity analysis over radiation, scattering, boundary conditions, and wa
 
 ## 6. Fire Safety Relevance
 
-**Category: Fundamental**
+**Category: fundamental**
 
 PSI-60 is several steps removed from operational fire safety, but its contributions matter for the accuracy of the predictive tools used in spacecraft fire safety analysis.
 
@@ -176,7 +176,7 @@ The sensitivity analysis over soot model parameters, the radiation re-absorption
 | Attribute | Value |
 |---|---|
 | **Primary Research Focus** | Soot formation, temperature field extraction, and model validation using archived SPICE flight data |
-| **Fire Safety Category** | Fundamental |
+| **Fire Safety Category** | fundamental  |
 | **Project Type** | Ground investigation — computational and image analysis of existing flight data |
 | **Combustion Domain** | Non-premixed coflow diffusion flames; soot formation and oxidation; radiative transport |
 | **Fuel Type** | Gaseous fuels (as covered in SPICE dataset — specific fuels not detailed in PSI-60 record) |

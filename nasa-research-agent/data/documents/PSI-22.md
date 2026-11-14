@@ -11,6 +11,7 @@ On Earth, buoyancy lifts hot combustion gases and distorts every small flame, wh
 | Full name | Advanced Combustion via Microgravity Experiments: Electric-Field Effects on Laminar Diffusion Flames |
 | Research area | Combustion Science (sub-area: Laminar Flames) |
 | Project type | Microgravity investigation |
+| Research category | fundamental |
 | Investigation period | 18 Nov 2016 to 17 Nov 2020 (4 years) |
 | Sponsoring agency | National Aeronautics and Space Administration (NASA) |
 | NASA center | Glenn Research Center (GRC) |

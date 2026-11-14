@@ -10,7 +10,7 @@ When a gaseous fuel burns without buoyancy pulling hot gas upward, the flame can
 | Research name | ACME s-Flame |
 | Full investigation name | Advanced Combustion via Microgravity Experiments - Structure and Response of Spherical Diffusion Flames |
 | Proposal title | Structure and Response of Spherical Diffusion Flames |
-| Research category | Combustion Science; sub-area: flames of gaseous fuels |
+| Research category | fundamental  |
 | Project type | Microgravity investigation |
 | Investigation period | 2015-02-05 to 2019-11-24 (about 57 months) |
 | Sponsoring agency | NASA |

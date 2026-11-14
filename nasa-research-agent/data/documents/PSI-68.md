@@ -12,6 +12,7 @@ FLEX-2 put burning fuel droplets inside a sealed chamber aboard the Internationa
 | Proposal title | The Fundamental Studies in Droplet Combustion and Flame Extinguishment in Microgravity |
 | Research area | Combustion Science / Spacecraft Fire Safety |
 | Project type | Microgravity investigation |
+| Research category | suppression |
 | Investigation period | 2016-08-12 to 2019-09-30 (about 37 months) |
 | Sponsoring agency | NASA |
 | NASA center | Glenn Research Center (GRC) |

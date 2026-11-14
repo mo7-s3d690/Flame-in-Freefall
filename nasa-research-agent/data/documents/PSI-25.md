@@ -11,6 +11,7 @@ BASS-II (Burning and Suppression of Solids – II) put small samples of solid fu
 | Full name | Burning and Suppression of Solids – II |
 | Research area | Combustion Science / Spacecraft Fire Safety |
 | Project type | Microgravity investigation |
+| Research category | prevention |
 | Investigation period | 2010-01-01 to 2022-12-31 |
 | Sponsor | NASA |
 | NASA center | Glenn Research Center (GRC) |

@@ -9,7 +9,7 @@ Most people picture a flame as a hot, bright, sooty thing. Cool flames are a dif
 | PSI ID | PSI-39 (Version 4) |
 | Research name | CFI |
 | Full investigation name | Cool Flames Investigation (CFI) |
-| Research category | Fundamental |
+| Research category | fundamental  |
 | Research area | Combustion Science, sub-area Droplets |
 | Investigation period | 10-01-2020 to 10-20-2021 (as listed in the source) |
 | Project type | Microgravity investigation |

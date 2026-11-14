@@ -11,7 +11,7 @@ Burning a droplet of fuel in the absence of gravity sounds deceptively simple, y
 | **PSI ID** | PSI-69 |
 | **Short Name** | FLEX |
 | **Full Investigation Name** | Flame Extinguishment Experiment |
-| **Research Category** | Fundamental / Suppression |
+| **Research Category** | suppression  |
 | **Research Area** | Combustion Science — Spacecraft Fire Safety |
 | **Investigation Period** | 01 August 2007 – 31 July 2016 |
 | **Sponsoring Agency** | National Aeronautics and Space Administration (NASA) |
@@ -111,7 +111,7 @@ The collective body of FLEX research supports the conclusion that microgravity c
 
 ## 6. Fire Safety Relevance
 
-**Category: Suppression / Fundamental**
+**Category: suppression**
 
 FLEX is directly relevant to fire suppression and to the fundamental characterisation of flammability limits, both of which are prerequisites for designing safe spacecraft atmospheres and effective fire suppression systems.
 
@@ -189,7 +189,7 @@ The reduced kinetic mechanisms and detailed heat-transfer models validated again
 | Attribute | Value |
 |---|---|
 | **Primary Research Focus** | Microgravity droplet combustion; flammability limit mapping; suppressant efficacy |
-| **Fire Safety Category** | Fundamental / Suppression |
+| **Fire Safety Category** | suppression  |
 | **Combustion Domain** | Liquid fuel droplet combustion; diffusion flames; near-limit and cool-flame combustion |
 | **Fuel Types** | Methanol, n-heptane, n-octane, n-decane, n-butanol, ethanol, propanol, Jet-A, biofuels (camelina, tallow), multi-component surrogates |
 | **Fuel Form** | Liquid droplets (fiber-supported and free-floating) |

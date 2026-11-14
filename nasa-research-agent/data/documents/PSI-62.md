@@ -8,7 +8,7 @@ Predicting whether a flame will creep along a solid material in orbit is harder 
 |---|---|
 | PSI ID | PSI-62 (Version 1) |
 | Research name | Concurrent Flame Spread Modeling using Flamelet Generated Manifolds in Microgravity with Comparison to BASS Experiments using Two-Color Tomography |
-| Research category | Prevention |
+| Research category | prevention  |
 | Research area | Combustion Science, sub-area Spacecraft Fire Safety |
 | Investigation period | 05-01-2019 to 04-30-2021 |
 | Project type | Ground investigation (computational, validated against archived flight imagery) |

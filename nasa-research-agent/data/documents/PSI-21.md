@@ -10,7 +10,7 @@ PSI-21 is a long-running ISS combustion investigation that burned nitrogen-dilut
 | Research name | ACME CLD Flame |
 | Full name | Advanced Combustion via Microgravity Experiments / Coflow Laminar Diffusion Flame |
 | Proposal title | Fuel Dilution Studies of Coflow Laminar Diffusion Flames in a Microgravity Environment |
-| Category | Microgravity investigation (Combustion Science, flames of gaseous fuel) |
+| Category | suppression  |
 | Investigation period | 2006-10-01 to 2022-05-31 |
 | Sponsoring agency | NASA |
 | NASA center | Glenn Research Center (GRC) |

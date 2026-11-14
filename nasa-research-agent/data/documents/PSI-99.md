@@ -11,6 +11,7 @@ SAFFIRE-II is a flight experiment that burned solid materials inside an uncrewed
 | Full investigation name | Spacecraft Fire Experiment-II (SAFFIRE-II) |
 | Research area | Combustion Science, sub-area Surface Combustion |
 | Project type | Microgravity Investigation |
+| Research category | prevention |
 | Investigation period | 30 Sep 2016 to 1 Apr 2017 (about 6 months), as listed in the source |
 | Sponsoring agency | NASA |
 | NASA center | Glenn Research Center (GRC) |

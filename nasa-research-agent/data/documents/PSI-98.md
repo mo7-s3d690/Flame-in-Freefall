@@ -12,7 +12,7 @@ Every fire safety experiment conducted aboard the ISS faces an inescapable const
 | **Short Name** | SAFFIRE-I |
 | **Full Investigation Name** | Spacecraft Fire Safety Experiment-I |
 | **Proposal Title** | Characterization of Smoke from Microgravity Fires for Improved Spacecraft Fire Detection |
-| **Research Category** | Suppression / Fundamental |
+| **Research Category** | prevention  |
 | **Research Area** | Combustion Science — Spacecraft Fire, Smoke Distribution |
 | **Investigation Period** | 02 March 2001 – 28 February 2008 |
 | **Sponsoring Agency** | National Aeronautics and Space Administration (NASA) |
@@ -123,7 +123,7 @@ SAFFIRE-I established the hardware concept, operational approach, and data colle
 
 ## 6. Fire Safety Relevance
 
-**Category: Fundamental / Suppression**
+**Category: prevention**
 
 SAFFIRE-I is among the most directly fire-safety-relevant investigations in the PSI program. It addresses the problem of large-scale fire behavior in microgravity as an engineering reality rather than a theoretical concern.
 
@@ -200,7 +200,7 @@ The in-situ O₂ and CO₂ monitoring during a large sealed-volume fire provides
 | Attribute | Value |
 |---|---|
 | **Primary Research Focus** | Large-scale fire growth in microgravity; flammability limits comparison with NASA-STD-6001 |
-| **Fire Safety Category** | Fundamental / Suppression |
+| **Fire Safety Category** | prevention  |
 | **Combustion Domain** | Solid-material flame spread; large-scale concurrent and opposed flow burning |
 | **Fuel Material** | SIBAL Fabric (75% cotton, 25% fiberglass by weight) |
 | **Sample Dimensions** | ~0.94 m × 0.40 m |
